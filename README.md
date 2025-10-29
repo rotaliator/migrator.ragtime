@@ -27,7 +27,8 @@ which takes five options:
   :logger           #ig/ref :duct/logger
   :strategy         :rebase
   :migrations       [...]
-  :migrations-table "ragtime_migrations"}}
+  :migrations-table "ragtime_migrations"
+  :add-hash-to-id?  true}}
 ```
 
 ### :database
@@ -77,6 +78,11 @@ name of the table to store the applied migrations (defaults to
 "ragtime_migrations" if not specified).
 
 [ragtime sql-database]: https://weavejester.github.io/ragtime/ragtime.jdbc.html#var-sql-database
+
+### :add-hash-to-id?
+
+Specifies whether to add a hash to the migration id. Enabled by default.
+Set to `false` for clj migrations.
 
 ## License
 
