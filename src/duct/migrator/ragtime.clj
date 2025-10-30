@@ -42,13 +42,9 @@
 (defn- add-hash-to-id [migration]
   (update migration :id str "#" (subs (hash-migration migration) 0 8)))
 
-(defn- get-migrations [{:keys [migrations add-hash-to-id?]
-                        :or   {add-hash-to-id? true}}]
-  (let [prep-migration (if add-hash-to-id?
-                         (comp jdbc/sql-migration add-hash-to-id)
-                         jdbc/sql-migration)]
-    (->> (sql/->migrations migrations)
-         (map prep-migration))))
+(defn- get-migrations [{:keys [migrations]}]
+  (->> (sql/->migrations migrations)
+       (map (comp jdbc/sql-migration add-hash-to-id))))
 
 (defn- get-database [{:keys [database] :as opts}]
   (jdbc/sql-database database (select-keys opts [:migrations-table])))
