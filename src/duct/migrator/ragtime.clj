@@ -35,9 +35,13 @@
 (defn- coll->netstring [coll]
   (netstring (mapcat (comp netstring get-bytes) coll)))
 
+(defn ->coll [d]
+  (cond (coll? d) d
+        (symbol? d) [(str d)]))
+
 (defn- hash-migration [{:keys [up down]}]
-  (sha1 (byte-array (concat u= (coll->netstring up)
-                            d= (coll->netstring down)))))
+  (sha1 (byte-array (concat u= (-> up ->coll coll->netstring)
+                            d= (-> down ->coll coll->netstring)))))
 
 (defn- add-hash-to-id [migration]
   (update migration :id str "#" (subs (hash-migration migration) 0 8)))
